@@ -1,0 +1,21 @@
+Title
+
+Image
+
+Form colors
+
+Login button 
+    - isImage?
+    
+Login Message
+
+
+
+BasicLoginPage()
+    .withTitle("My Custom Title")
+    .hasTitlecolor(.red)
+    .idColor(.gray)
+    .pwdColor(.red)
+    
+    
+    
