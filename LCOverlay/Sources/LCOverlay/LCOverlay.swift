@@ -1,15 +1,17 @@
 import SwiftUI
 
-public struct LCOverlay: View {
+public struct LCOverlay<T: View> : View {
     public private(set) var text = "Hello, World!"
     
-    public init(isPresented: Binding<Bool>) {
+    public init(isPresented: Binding<Bool>, middleContent: Binding<T>) {
         self._isPresented = isPresented
+        self._middleContent = middleContent
     }
     
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     @Binding var isPresented: Bool
     @State var rotation: Double = 15
+    @Binding var middleContent: T
     
     public var body: some View {
 //        ZStack {
@@ -24,11 +26,14 @@ public struct LCOverlay: View {
                 .font(.system(size: 50))
                 Spacer()
                 
-                                                
-                Image("ele", bundle: Bundle.module)
-                    .resizable()
-                    .scaledToFit()                
                 
+                if let mc = middleContent as? Image {
+                    mc.resizable().scaledToFit()
+                } else {
+                    middleContent
+                }
+                                                                
+
                 Spacer()
                 HStack {
                     Button("Ex Button 1", action: {})

@@ -7,18 +7,21 @@
 
 import SwiftUI
 
-struct LoginView: View {
+struct LoginView<TitleView: View, LoginMsg: View>: View {
     @State private var userName: String = ""
     @State private var password: String = ""
-    
+
     @Binding var title: String
     @Binding var hasAccess: Bool
-    @Binding var customUserTitle: AnyView
+    @Binding var titleView: TitleView
+    @Binding var loginMsg: LoginMsg
+    @Binding var userNColor: Color
+    @Binding var pwdColor: Color
     
     var body: some View {
         VStack {
             if title == "-x9@kfj" {
-                AnyView(customUserTitle)
+                titleView
                     .padding(.top)
             } else {
                 Text("\(title)")
@@ -28,7 +31,7 @@ struct LoginView: View {
             createLoginFields()
             Spacer()
 //            createLoginButton()
-            Text("* This is a login messgae. This can tell the user what to do if they don't have creds yet, info, etc. *")
+            loginMsg
                 .padding()
                 .padding(.top)
             Spacer()
@@ -42,28 +45,13 @@ struct LoginView: View {
                 .resizable()
                 .scaledToFit()
                 
-//            Spacer()
+
             VStack {
-
-                if #available(macOS 12.0, *) {
-                    TextField("username", text: $userName)
-                        .padding(7)
-                        .foregroundColor(.red)
-                        .textFieldStyle(.roundedBorder)
-                        .background(.teal)
-                        .cornerRadius(15)
-                    SecureField("password", text: $password)
-                        .padding(7)
-                        .foregroundColor(.gray)
-                        .textFieldStyle(.roundedBorder)
-                        .background(.yellow)
-                        .cornerRadius(15)
-                    createLoginButton()
-                } else {
-                    // Fallback on earlier versions
-                    Text("NOT COMPATIBLE....")
-                }
-
+                TextField("username", text: $userName)
+                    .userNameStyle(color: userNColor)
+                SecureField("password", text: $password)
+                    .userPwdStyle(color: pwdColor)
+                createLoginButton()
 
             }
             .frame(maxWidth: 300)
@@ -78,6 +66,7 @@ struct LoginView: View {
                 if userName.lowercased() == "cory" && password.lowercased() == "con" {
                     hasAccess = true
                 }
+                hasAccess = true
             }, label: {
                 Text("Login")
                     .foregroundColor(.white)
@@ -94,4 +83,28 @@ struct LoginView: View {
     }
 }
 
+extension TextField {
+    
+    func userNameStyle(color: Color) -> some View {
+        
+        return self
+            .padding(7)
+            .foregroundColor(.red)
+            .textFieldStyle(.roundedBorder)
+            .background(color)
+            .cornerRadius(15)
+    }
+}
 
+extension SecureField {
+    func userPwdStyle(color: Color) -> some View {
+        
+        return self
+            .padding(7)
+            .foregroundColor(.gray)
+            .textFieldStyle(.roundedBorder)
+            .background(color)
+            .cornerRadius(15)
+    }
+    
+}
